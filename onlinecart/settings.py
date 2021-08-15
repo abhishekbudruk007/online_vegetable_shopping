@@ -85,13 +85,12 @@ WSGI_APPLICATION = 'onlinecart.wsgi.application'
 DATABASES = {
     'default': {
            'ENGINE': 'django.db.backends.postgresql',
-           'NAME': 'trendingupdatesdb_new',
-           'USER': 'postgres',
-           'PASSWORD': 'Root@123',
-           'HOST': '127.0.0.1',
-           'PORT': '5433',
+           'NAME': os.environ['DATABASE_NAME'],
+           'USER': os.environ['DATABASE_USER'],
+           'PASSWORD': os.environ['DATABASE_PASSWORD'],
+           'HOST': os.environ['DATABASE_HOST'],
+           'PORT': os.environ['DATABASE_PORT'],
     }
-
 }
 
 
@@ -160,16 +159,16 @@ LOGIN_REQUIRED_IGNORE_PATHS = [
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
+EMAIL_HOST = os.environ['EMAIL_HOST']
+EMAIL_PORT = os.environ['EMAIL_PORT']
 EMAIL_USE_LOCALTIME = False
-EMAIL_HOST_USER = 'abhishek.budruk.tutorial@gmail.com'
-EMAIL_HOST_PASSWORD = 'bgumzeayfxubvuta'
+EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_SSL_CERTFILE = None
 EMAIL_SSL_KEYFILE = None
 EMAIL_TIMEOUT = None
-DEFAULT_FROM_EMAIL = 'abhishek.budruk.tutorial@gmail.com'
+DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL']
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
