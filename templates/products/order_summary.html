@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<main>
+   <div class= "container">
+       <div class="table-responsive text-nowrap">
+   <h3>
+       <strong>Your Cart</strong>
+   </h3>
+   <table class="table">
+       <thead>
+       <tr>
+           <th scope="col">#</th>
+           <th scope="col">Product Name</th>
+           <th scope="col">Price</th>
+           <th scope="col">Quantity</th>
+           <th scope="col">Total Product Price</th>
+       </tr>
+       </thead>
+       <tbody>
+       {% for order_item in object.products.all %}
+       <tr>
+           <th scope="row">{{ forloop.counter }}</th>
+           <td>{{ order_item.orderitem_product.product_name }}</td>
+           <td>
+               Rs. {{ order_item.orderitem_product.product_price}}
+           </td>
+           <td>
+               <a href="{% url 'products:reduce_quantity_item' order_item.orderitem_product.pk %}"><span class="glyphicon glyphicon-minus"></span></a>
+               {{ order_item.orderitem_quantity }}
+               <a href="{% url 'products:add_to_cart' order_item.orderitem_product.pk %}"><span class="glyphicon glyphicon-plus"></span></a>
+           </td>
+           <td>
+
+               Rs. {{ order_item.get_total_item_price }}
+
+                <a href="{% url 'products:remove_from_cart' order_item.orderitem_product.pk %}">
+                   <span class="glyphicon glyphicon-trash"></span>
+                </a>
+
+           </td>
+       </tr>
+
+       {% empty %}
+       <tr>
+           <td colspan="5">Your Cart Empty</td>
+       </tr>
+
+        <tr>
+           <td colspan="5">
+               <a href="{% url 'dashboard:home' %}" class="btn btn-primary float-right">Continue Shopping</a>
+           </td>
+       </tr>
+
+       {% endfor %}
+
+       {% if object.get_total_price %}
+       <tr>
+           <td colspan="4"><b>Total Order Price</b></td>
+           <td>Rs. {{ object.get_total_price }}</td>
+       </tr>
+        <tr>
+           <td colspan="5">
+               <a href="{% url 'products:checkout' %}" class="btn btn-warning float-right ml-2">Checkout</a>
+               <a href="{% url 'dashboard:home' %}" class="btn btn-primary float-right">Continue Shopping</a>
+           </td>
+       </tr>
+      
+       {% endif %}
+      
+       </tbody>
+   </table>
+
+       </div>
+   </div>
+</main>
+
+{% endblock content %}

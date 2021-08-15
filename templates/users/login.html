@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %} Login {% endblock %}
+
+
+{% block content %}
+<div class="row">
+   <div class="col-md-12">
+       <div class="col-md-4 col-md-offset-4">
+           <form method="POST" class="login-form" action="{% url 'users:authenticate' %}">
+           {% csrf_token %}
+                 {% if messages %}
+                   <div class="bs-example">
+                       <div class="wd-350 alert alert-danger fade in" >
+                           {% for message in messages %}
+                             <strong > {{ message }} </strong>
+                           {% endfor %}
+                       </div>
+                   </div>
+                 {% endif %}
+                 <h1>Login</h1>
+                 <div class="control-group">
+                   <input type="text" class="form-control wd-350" value="" placeholder="username" name="username" required>
+                 </div>
+                   <br>
+                 <div class="control-group">
+                   <input type="password" class="form-control wd-350" value="" placeholder="password" name="password" required>
+                 </div>
+                   <br>
+                   <input type="submit" value="Log in" name="submit_form" class="btn btn-primary btn-login wd-350" >
+                   <br>
+                   <br>
+
+                    <p><a href="{% url 'users:password_reset' %}">Forgot Password</a></p>
+                   <p>Not a user ?</p> SignUp  <a href="{% url 'users:signup' %}">here</a>
+         </form>
+       </div>
+   </div>
+</div>
+
+{% endblock %}
+
+
+
+<!--action="{% url 'users:authenticate' %}"-->

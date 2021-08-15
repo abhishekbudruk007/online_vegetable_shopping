@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} Home {% endblock %}</title>
+
+</head>
+<body>
+    {% block content %}
+        {% if messages %}
+            <div class="bs-example">
+                <div class="wd-350 alert alert-success fade in" >
+                    {% for message in messages %}
+                      <strong > {{ message }} </strong>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row" style="overflow:hidden;">
+               {% for product in products %}
+                   <div class="col-sm-4 col-md-3">
+                     <div class="row">
+                         <div class="col-md-8 col-md-offset-2">
+                             <a href="{% url 'products:product_detail_view' product.id %}">
+                               <div class="thumbnail">
+                                 <img src="{{ product.product_photo.url }}" height="100%" width="100%" alt="Product Image">
+                       <div class="caption text-center">
+                                {% if product.product_type == "V" %}
+                                   <h5>Vegetable</h5>
+                                {% else %}
+                                    <h5>Fruit</h5>
+                                {% endif %}
+                                 </div>
+
+                                 <div class="caption text-center">
+                                   <h3>{{ product.product_name }}</h3>
+                                 </div>
+                                 <div>
+                                   Rs.  {{ product.product_price }} &nbsp; <p class="pull-left"> </p> &nbsp; <p class="pull-right"> {{ product.product_quantity_type}}</p>
+                                   <br><br>
+                                 </div>
+                               </div>
+                             </a>
+                         </div>
+                     </div>
+                   </div>
+               {% endfor %}
+            </div>
+<!--                <div class="col-md-4">-->
+<!--                    <h1>Welcome To Django Session - {{ name }}</h1>-->
+<!--                    <h1>Display Lowercase - {{ name | lower }}</h1>-->
+<!--                    <h1>Display Uppercase - {{ name | upper }}</h1>-->
+<!--                    <h1>Display Title - {{ name | title }}</h1>-->
+<!--                </div>-->
+<!--                <div class="col-md-4">-->
+<!--                     <h1>List {{ name_list }}</h1>-->
+<!--                    <h1>Join</h1>-->
+<!--                    <h2>Join {{ name_list | join:""}}</h2>-->
+<!--                    <h2>Join Seperated By Comma {{ name_list | join:","}}</h2>-->
+<!--                    <br>-->
+
+<!--                    <h1>Length</h1>-->
+<!--                    <h2>Length of Name {{ name | length }}</h2>-->
+<!--                    <h2>Length of List {{ name_list | length }}</h2>-->
+<!--                </div>-->
+<!--                <div class="col-md-4">-->
+<!--                    <h1>If Else Condition  </h1>-->
+<!--                    {% if name == "Abhishek" %}-->
+<!--                        <h3> He is Admin - {{ name }} </h3>-->
+<!--                    {% else %}-->
+<!--                        <h3>He is User - {{ name }} </h3>-->
+<!--                    {% endif %}-->
+
+<!--                    <h1>For Loop </h1>-->
+<!--                    {% for var in name_list %}-->
+<!--                        <h5>{{ var }}</h5>-->
+<!--                    {% endfor %}-->
+<!--                </div>-->
+            </div>
+        </div>
+    {% endblock %}
+
+
+
+</body>
+</html>

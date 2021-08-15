@@ -1,0 +1,80 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!--    Title for Your Page-->
+    <title>{% block title %} {% endblock %} </title>
+    <!--    Global CSS Files-->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/bootstrap-theme.min.css' %}" rel="stylesheet" type="text/css">
+    <!-- Global JS files -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+
+    {% block custom_css %}
+
+    {% endblock %}
+    <!-- Latest compiled and minified CSS -->
+<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">-->
+
+
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="header">
+            <nav class="navbar navbar-inverse">
+                <div class="navbar-header">
+                    <a href="#" class="navbar-brand">WebSite Name</a>
+                </div>
+                <div style="margin-right:10px;padding:0.5px">
+                    <ul class="nav navbar-nav">
+                        <li><a href="{% url 'dashboard:home' %}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-th-list"></span> My Orders</a></li>
+                        <li><a href="{% url 'products:wishlist' %}"><span class="glyphicon glyphicon-heart"></span> Wishlist</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="{% url 'products:order_summary' %}"> <span class="glyphicon glyphicon-shopping-cart"></span> My Cart</a></li>
+                        {% if request.user.is_authenticated %}
+                            <li class="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ request.user.username }} <span class="caret"></span></a>
+                              <ul class="dropdown-menu">
+                                <li><a href="{% url 'users:update_user_profile' request.user.id %}">Update Profile</a></li>
+                                <li><a href="{% url 'users:password_change' %}">Change Password</a></li>
+                                  <li role="separator" class="divider"></li>
+                                <li><a href="{% url 'users:logout' %}"> Logout </a></li>
+                              </ul>
+                            </li>
+
+                        {% else %}
+                            <li><a href="{% url 'users:login' %}"> <span class="glyphicon glyphicon-log-in"></span> Login </a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+
+        {% block content %}
+
+        {% endblock %}
+
+        <div class="footer navbar-fixed-bottom" style="background-color:grey;">
+            <div class="text-center">
+                <h5><b>Copyrights</b> 2020-21 trendingupdates.com</h5>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
+
+
+{% block custom_js %}
+
+{% endblock %}

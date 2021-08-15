@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block title %} Login {% endblock %}
+
+{% block content %}
+
+<!--<div class="col-md-row">-->
+<!--    <div class="col-md-12">-->
+<!--        <div class="col-md-6 col-md-offset-3">-->
+<!--            <table>-->
+<!--           <form action="{% url 'users:signup' %}" method="POST" enctype="multipart/form-data">-->
+<!--            {% csrf_token %}-->
+<!--                {{ form.as_table }}-->
+<!--                <br>-->
+<!--            <input type="submit" value="Register">-->
+<!--            </form>-->
+<!--            </table>-->
+<!--        </div>-->
+
+<!--    </div>-->
+<!--</div>-->
+
+
+<div class="row">
+    <dov class="col-md-12">
+        <div class="col-md-6 col-md-offset-3">
+            <form method="POST" action="{% url 'users:update_user_profile' request.user.id %}" enctype="multipart/form-data">
+             {% csrf_token %}
+               {% if messages %}
+                 {% for message in messages %}
+                    {% if message.tags == "success" %}
+                         <div class="wd-350 alert alert-success fade in" >
+                           <strong > {{ message }} </strong>
+                         </div>
+                    {% elif message.tags == "error" %}
+                         <div class="wd-350 alert alert-danger fade in" >
+                           <strong > {{ message }} </strong>
+                         </div>
+                    {% endif %}
+                 {% endfor %}
+               {% endif %}
+                 <h1>Update User Profile</h1>
+                 <div class="form-group row">
+                     <label class="col-lg-3 col-form-label">Username:</label>
+                     <div class="col-lg-9">
+                         {{ form.username }}
+                     </div>
+                 </div>
+
+
+                 <div class="form-group row">
+                     <label class="col-lg-3 col-form-label">First Name:</label>
+                     <div class="col-lg-9">
+                         {{ form.first_name }}
+                     </div>
+                 </div>
+                <div class="form-group row">
+                     <label class="col-lg-3 col-form-label">Last Name:</label>
+                     <div class="col-lg-9">
+                         {{ form.last_name }}
+                     </div>
+                 </div>
+                 <div class="form-group row">
+                     <label class="col-lg-3 col-form-label">Email:</label>
+                     <div class="col-lg-9">
+                         {{ form.email }}
+                     </div>
+                 </div>
+
+                 <div class="form-group row">
+                     <label class="col-lg-3 col-form-label">Upload Photo:</label>
+                     <div class="col-lg-9">
+                         {{ form.user_photo }}
+                     </div>
+                 </div>
+                 <br>
+                <input type="submit" value="Update My user" name="submit_form" class="btn btn-primary btn-login wd-350" >
+            </form>
+        </div>
+    </dov>
+</div>
+
+
+{% endblock %}
+
+
+<!--<div class="row">-->
+<!--    <dov class="col-md-12">-->
+<!--        <div class="col-md-6 col-md-offset-3">-->
+<!--            <form method="POST" action="{% url 'users:signup' %}" enctype="multipart/form-data">-->
+<!--             {% csrf_token %}-->
+<!--               {% if messages %}-->
+<!--                 {% for message in messages %}-->
+<!--                    {% if message.tags == "success" %}-->
+<!--                         <div class="wd-350 alert alert-success fade in" >-->
+<!--                           <strong > {{ message }} </strong>-->
+<!--                         </div>-->
+<!--                    {% elif message.tags == "error" %}-->
+<!--                         <div class="wd-350 alert alert-danger fade in" >-->
+<!--                           <strong > {{ message }} </strong>-->
+<!--                         </div>-->
+<!--                    {% endif %}-->
+<!--                 {% endfor %}-->
+<!--               {% endif %}-->
+<!--                 <h1>Sign Up</h1>-->
+<!--                 <div class="form-group row">-->
+<!--                     <label class="col-lg-3 col-form-label">Username:</label>-->
+<!--                     <div class="col-lg-9">-->
+<!--                         {{ form.username }}-->
+<!--                     </div>-->
+<!--                 </div>-->
+<!--                 <div class="form-group row">-->
+<!--                     <label class="col-lg-3 col-form-label">Email:</label>-->
+<!--                     <div class="col-lg-9">-->
+<!--                         {{ form.email }}-->
+<!--                     </div>-->
+<!--                 </div>-->
+<!--                 <div class="form-group row">-->
+<!--                     <label class="col-lg-3 col-form-label">Password1:</label>-->
+<!--                     <div class="col-lg-9">-->
+<!--                         {{ form.password1 }}-->
+<!--                     </div>-->
+<!--                 </div>-->
+<!--                 <div class="form-group row">-->
+<!--                     <label class="col-lg-3 col-form-label">Password2:</label>-->
+<!--                     <div class="col-lg-9">-->
+<!--                         {{ form.password2 }}-->
+<!--                     </div>-->
+<!--                 </div>-->
+<!--                 <div class="form-group row">-->
+<!--                     <label class="col-lg-3 col-form-label">Upload Photo:</label>-->
+<!--                     <div class="col-lg-9">-->
+<!--                         {{ form.user_photo }}-->
+<!--                     </div>-->
+<!--                 </div>-->
+<!--                 <br>-->
+<!--                <input type="submit" value="Sign In" name="submit_form" class="btn btn-primary btn-login wd-350" >-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </dov>-->
+<!--</div>-->
+
+
+
+
+
+<!--action="{% url 'users:authenticate' %}"-->
