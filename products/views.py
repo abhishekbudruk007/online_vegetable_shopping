@@ -213,8 +213,6 @@ class PaymentView(View):
         return render(self.request, "products/payment.html", context)
     def post(self, *args, **kwargs):
         order = Order.objects.get(user=self.request.user, ordered=False)
-        context = {
-            'order': order
-        }
-        return render(self.request, "products/payment.html", context)
+        print("request",self.request)
+        return render(self.request, "products/payment.html")
 
