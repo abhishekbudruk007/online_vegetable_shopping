@@ -16,5 +16,6 @@ urlpatterns = [
     path('reduce_quantity_item/<pk>/', views.reduce_quantity_item, name='reduce_quantity_item'),
     path('order_summary/', views.OrderSummaryView.as_view(), name='order_summary'),
     path('checkout/', views.CheckoutView.as_view(), name='checkout'),
+    path('payment/<payment-option>', views.PaymentView.as_view(), name='payment')
 
 ]

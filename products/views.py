@@ -124,8 +124,8 @@ class OrderSummaryView(View):
            }
            return render(self.request, 'products/order_summary.html', context)
        except ObjectDoesNotExist:
-           messages.error(self.request, "You do not have an order")
-           return redirect("dashboard:home")
+           # messages.error(self.request, "You do not have an order")
+           return render(self.request, 'products/order_summary.html')
 
 
 def reduce_quantity_item(request, pk):
@@ -191,13 +191,7 @@ class CheckoutView(View):
                 checkout_address.save()
                 order.checkout_address = checkout_address
                 order.save()
-                if payment_option == 'C':
-                    order.payment = payment_option
-                    order.ordered = True
-                    order.save()
-                    messages.add_message(self.request, messages.SUCCESS, "Ordered Successfully")
-                    return redirect('dashboard:home')
-                elif payment_option == 'S':
+                if payment_option == 'S':
                     return redirect('products:payment', payment_option='stripe')
                 elif payment_option == 'P':
                     return redirect('products:payment', payment_option='paypal')
@@ -205,6 +199,16 @@ class CheckoutView(View):
                     messages.warning(self.request, "Invalid Payment option")
                     return redirect('products:checkout')
 
+
         except ObjectDoesNotExist:
             messages.error(self.request, "You do not have an order")
             return redirect("products:order_summary")
+
+class PaymentView(View):
+    def get(self, *args, **kwargs):
+        order = Order.objects.get(user=self.request.user, ordered=False)
+        context = {
+            'order': order
+        }
+        return render(self.request, "products/payment.html", context)
+
