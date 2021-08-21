@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import redirect , get_object_or_404
 from .models import Products , OrderItem , CheckoutAddress
-from .models import Wishlist , Order
+from .models import Wishlist , Order , Payment
 from .forms import CheckoutForm
 from django.urls import reverse_lazy
 # Create your views here.
@@ -12,6 +12,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.utils import timezone
+from django.conf import settings
+import stripe
+stripe.api_key = settings.STRIPE_KEY
 
 def DetailViewFBV(request,pk):
     # sql_query = "select * from product where id=pk"
@@ -205,14 +208,77 @@ class CheckoutView(View):
             return redirect("products:order_summary")
 
 class PaymentView(View):
-    def get(self, *args, **kwargs):
-        order = Order.objects.get(user=self.request.user, ordered=False)
-        context = {
-            'order': order
-        }
-        return render(self.request, "products/payment.html", context)
-    def post(self, *args, **kwargs):
-        order = Order.objects.get(user=self.request.user, ordered=False)
-        print("request",self.request)
-        return render(self.request, "products/payment.html")
+   def get(self, *args, **kwargs):
+       order = Order.objects.get(user=self.request.user, ordered=False)
+       context = {
+           'order': order
+       }
+       return render(self.request, "products/payment.html", context)
 
+   def post(self, *args, **kwargs):
+       order = Order.objects.get(user=self.request.user, ordered=False)
+       token = self.request.POST.get('stripeToken')
+       amount = int(order.get_total_price() * 100)  # cents
+
+       try:
+           # customer = stripe.Customer.create(
+           #
+           # )
+           charge = stripe.Charge.create(
+               amount=amount,
+               currency="inr",
+               source=token
+           )
+
+           # create payment
+           payment = Payment()
+           payment.stripe_id = charge['id']
+           payment.user = self.request.user
+           payment.amount = order.get_total_price()
+           payment.save()
+
+           # assign payment to order
+           order.ordered = True
+           order.payment = payment
+           order.save()
+
+           messages.success(self.request, "Payment is Successful")
+           return redirect('dashboard:home')
+
+       except stripe.error.CardError as e:
+           body = e.json_body
+           err = body.get('error', {})
+           messages.error(self.request, f"{err.get('message')}")
+           return redirect('dashboard:home')
+
+       except stripe.error.RateLimitError as e:
+           # Too many requests made to the API too quickly
+           messages.error(self.request, "To many request error")
+           return redirect('dashboard:home')
+
+       except stripe.error.InvalidRequestError as e:
+           # Invalid parameters were supplied to Stripe's API
+           messages.error(self.request, "Invalid Parameter")
+           return redirect('dashboard:home')
+
+       except stripe.error.AuthenticationError as e:
+           # Authentication with Stripe's API failed
+           # (maybe you changed API keys recently)
+           messages.error(self.request, "Authentication with stripe failed")
+           return redirect('dashboard:home')
+
+       except stripe.error.APIConnectionError as e:
+           # Network communication with Stripe failed
+           messages.error(self.request, "Network Error")
+           return redirect('dashboard:home')
+
+       except stripe.error.StripeError as e:
+           # Display a very generic error to the user, and maybe send
+           # yourself an email
+           messages.error(self.request, "Something went wrong")
+           return redirect('dashboard:home')
+
+       except Exception as e:
+           # Something else happened, completely unrelated to Stripe
+           messages.error(self.request, "Not identified error")
+           return redirect('dashboard:home')
