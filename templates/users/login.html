@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load socialaccount %}
 {% block title %} Login {% endblock %}
 
 
@@ -35,6 +35,17 @@
                    <p>Not a user ?</p> SignUp  <a href="{% url 'users:signup' %}">here</a>
          </form>
        </div>
+   </div>
+</div>
+
+<div class="row">
+   <div class="col-md-12">
+       <h1>My Google Social Media Login  </h1>
+       {% if user.is_authenticated %}
+         <p>Welcome, You are logged in as {{ user.username }}</p>
+       {% else %}
+         <a href="{% provider_login_url 'google' %}">Login With Google</a>
+       {% endif %}
    </div>
 </div>
 
